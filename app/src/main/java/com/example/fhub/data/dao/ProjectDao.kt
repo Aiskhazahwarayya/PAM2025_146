@@ -24,4 +24,13 @@ interface ProjectDao {
     fun getProjectByStatusStream(idUser: Int, status: String): Flow<List<ProjectEntity>>
     @Query("SELECT * FROM project WHERE idUser = :idUser ORDER BY namaProject ASC")
     fun getAllProjectByUserStream(idUser: Int): Flow<List<ProjectEntity>>
+
+    // Query untuk mendukung Dashboard: Proyek In Progress dengan deadline < 7 hari
+    @Query("""
+    SELECT * FROM project 
+    WHERE idUser = :idUser AND status = 'In Progress' 
+    AND (deadline - strftime('%s','now')*1000) < (7 * 24 * 60 * 60 * 1000)
+    ORDER BY deadline ASC
+""")
+    fun getUrgentProjectsStream(idUser: Int): Flow<List<ProjectEntity>>
 }

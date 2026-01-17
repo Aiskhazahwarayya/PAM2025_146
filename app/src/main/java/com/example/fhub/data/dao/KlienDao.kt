@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.freelancehub.data.entity.KlienEntity
+import com.example.fhub.data.entity.KlienEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
