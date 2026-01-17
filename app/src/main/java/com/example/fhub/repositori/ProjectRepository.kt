@@ -8,6 +8,7 @@ interface ProjectRepository {
     fun getAllProjectsByUserStream(idUser: Int): Flow<List<ProjectEntity>>
     fun getProjectByStatusStream(idUser: Int, status: String): Flow<List<ProjectEntity>>
     fun getProjectStream(id: Int): Flow<ProjectEntity?>
+    fun getUrgentProjectsStream(idUser: Int): Flow<List<ProjectEntity>>
     suspend fun insertProject(project: ProjectEntity)
     suspend fun deleteProject(project: ProjectEntity)
     suspend fun updateProject(project: ProjectEntity)
@@ -19,6 +20,7 @@ class OfflineProjectRepository(
     override fun getAllProjectsByUserStream(idUser: Int): Flow<List<ProjectEntity>> = projectDao.getAllProjectByUserStream(idUser)
     override fun getProjectByStatusStream(idUser: Int, status: String): Flow<List<ProjectEntity>> = projectDao.getProjectByStatusStream(idUser, status)
     override fun getProjectStream(id: Int): Flow<ProjectEntity?> = projectDao.getProjectStream(id)
+    override fun getUrgentProjectsStream(idUser: Int): Flow<List<ProjectEntity>> { return projectDao.getUrgentProjectsStream(idUser) }
     override suspend fun insertProject(project: ProjectEntity) = projectDao.insert(project)
     override suspend fun updateProject(project: ProjectEntity) = projectDao.update(project)
     override suspend fun deleteProject(project: ProjectEntity) {
