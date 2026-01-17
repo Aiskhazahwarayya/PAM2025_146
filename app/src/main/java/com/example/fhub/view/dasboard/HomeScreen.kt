@@ -118,7 +118,7 @@ fun HomeScreen(
                 .padding(bottom = padding.calculateBottomPadding())
 
         ) {
-            // ================= HEADER DASHBOARD (REQ-F-022) =================
+            // ================= HEADER DASHBOARD =================
             item {
                 Box(
                     modifier = Modifier
@@ -167,7 +167,7 @@ fun HomeScreen(
                 }
             }
 
-            // ================= AKSI CEPAT (REQ-F-023) =================
+            // ================= AKSI CEPAT  =================
             item {
                 Column(
                     modifier = Modifier
@@ -211,7 +211,7 @@ fun HomeScreen(
 
             item { Spacer(Modifier.height(5.dp)) }
 
-            // ================= DEADLINE MENDEKATI (REQ-F-024) =================
+            // ================= DEADLINE MENDEKATI  =================
             if (upcomingDeadlines.isNotEmpty()) {
                 item {
                     Column(modifier = Modifier.padding(horizontal = 24.dp)) {
@@ -482,10 +482,10 @@ fun DeadlineCard(
     }
 }
 
-// Helper Functions (Internal UI Logic)
+// Helper Functions
 private fun getDaysUntilDeadline(deadline: Any?): Int {
     return try {
-        // Konversi aman dari berbagai tipe (Long/Timestamp/Date) ke java.util.Date
+        // Konversi aman dari berbagai tipe (Long/Timestamp/Date)
         val deadlineDate = when (deadline) {
             is Long -> Date(deadline)
             is java.sql.Timestamp -> Date(deadline.time)

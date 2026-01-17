@@ -126,7 +126,6 @@ fun RegisterScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Jarak agar konten agak turun dari atas layar
             Spacer(Modifier.height(70.dp))
 
             // --- HEADER DENGAN ICON BESAR ---
@@ -220,14 +219,14 @@ fun RegisterScreen(
                             singleLine = true
                         )
 
-                        // Input Password (ICON MATA HANYA MUNCUL SAAT DIISI)
+                        // Input Password
                         OutlinedTextField(
                             value = password,
                             onValueChange = { password = it },
                             label = { Text(stringResource(R.string.label_password)) },
                             leadingIcon = { Icon(Icons.Default.Lock, null, tint = Color(0xFF3949AB)) },
                             trailingIcon = {
-                                // Logic: Icon mata muncul hanya jika field tidak kosong
+                                // Icon mata muncul hanya jika field tidak kosong
                                 if (password.isNotEmpty()) {
                                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                         Icon(
@@ -245,7 +244,7 @@ fun RegisterScreen(
                             supportingText = if (isPasswordError) { { Text(stringResource(R.string.error_password_too_short), color = Color.Red) } } else null
                         )
 
-                        // Error dari ViewModel (Jika ada)
+                        // Error dari ViewModel
                         if (authState.errorMessageId != null) {
                             ErrorMessageBox(message = stringResource(authState.errorMessageId!!))
                         }

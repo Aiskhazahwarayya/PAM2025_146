@@ -61,7 +61,7 @@ object ValidasiUtils {
 
     /**
      * Validasi Tanggal Mulai / Terbit.
-     * Sesuai Kamus Data: Default hari ini, tidak boleh masa lalu.
+     * Default hari ini, tidak boleh masa lalu.
      */
     fun isTanggalInputValid(dateObj: Any?): Boolean {
         val millis = toMillis(dateObj)
@@ -71,7 +71,6 @@ object ValidasiUtils {
 
     /**
      * Validasi Deadline Proyek / Jatuh Tempo Invoice.
-     * End tidak boleh sebelum Start.
      */
     fun isRangeTanggalValid(startObj: Any?, endObj: Any?): Boolean {
         val start = toMillis(startObj)

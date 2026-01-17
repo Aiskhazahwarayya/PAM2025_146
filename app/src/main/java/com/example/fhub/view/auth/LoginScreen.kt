@@ -93,7 +93,7 @@ fun LoginScreen(
     var showContent by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { showContent = true }
 
-    // Logic Sukses Login
+    // Login sukses
     LaunchedEffect(authState.isSuccess) {
         if (authState.isSuccess) {
             Toast.makeText(context, "Login berhasil!", Toast.LENGTH_SHORT).show()
@@ -163,7 +163,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
-                    .offset(y = (-30).dp) // Efek naik menimpa header biru
+                    .offset(y = (-30).dp)
             ) {
                 AnimatedVisibility(
                     visible = showContent,

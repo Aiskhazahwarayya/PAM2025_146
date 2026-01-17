@@ -26,7 +26,7 @@ import java.util.Locale
 
 object FormatterUtils {
 
-    // ✅ UPDATE: Format Desimal (,00) sesuai SRS
+    // Format Desimal (,00)
     fun formatRupiah(context: Context, amount: Double): String {
         val localeID = Locale("in", "ID")
         val numberFormat = NumberFormat.getNumberInstance(localeID)
