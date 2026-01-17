@@ -1,5 +1,6 @@
 package com.example.fhub.view.invoice
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,6 +28,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Receipt
@@ -111,137 +114,184 @@ fun InvoiceDetailScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Detail Invoice", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
-            )
-        }
+        containerColor = Color(0xFFF8F9FE) // Background abu-abu kebiruan soft
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
-                .padding(padding)
-                .padding(20.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = padding.calculateBottomPadding())
+                .verticalScroll(rememberScrollState())
         ) {
-            // --- KARTU INFORMASI UTAMA (TEMA BIRU INDIGO) ---
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                // Menggunakan Biru Indigo Muda sebagai background kartu
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFE8EAF6))
-            ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    // Nomor Invoice di Header Kartu
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(Icons.Default.Receipt, null, tint = Color(0xFF1A237E))
-                        Text(
-                            text = invoice.invoiceNumber,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color(0xFF1A237E)
+            // --- HEADER GRADIENT DENGAN RINGKASAN TOTAL ---
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(240.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color(0xFF1A237E), Color(0xFF3949AB))
                         )
-                    }
-
-                    HorizontalDivider(thickness = 1.dp, color = Color(0xFF1A237E).copy(alpha = 0.1f))
-
-                    // Detail Informasi dengan Icon Biru
-                    DetailRowWithIcon(Icons.Default.Person, "Klien", klienAsli?.namaLengkap ?: "-")
-                    DetailRowWithIcon(Icons.Default.Work, "Proyek", projectAsli?.namaProject ?: "-")
-                    DetailRowWithIcon(Icons.Default.CalendarToday, "Terbit", FormatterUtils.formatTanggal(invoice.issueDate))
-                    DetailRowWithIcon(Icons.Default.Event, "Tempo", FormatterUtils.formatTanggal(invoice.dueDate))
-
-                    val isLunas = invoice.status == JenisStatus.INVOICE_LUNAS
-                    DetailRowWithIcon(
-                        icon = if(isLunas) Icons.Default.CheckCircle else Icons.Default.Info,
-                        label = "Status",
-                        value = if(isLunas) "LUNAS" else "PENDING",
-                        valueColor = if(isLunas) Color(0xFF2E7D32) else Color(0xFFD32F2F)
                     )
+            ) {
+                IconButton(
+                    onClick = onBack,
+                    modifier = Modifier.padding(start = 8.dp, top = 8.dp)
+                ) {
+                    Icon(Icons.Default.ArrowBack, "Kembali", tint = Color.White)
+                }
 
-                    Spacer(Modifier.height(8.dp))
-                    Text("Rincian Tagihan :", style = MaterialTheme.typography.labelLarge, color = Color(0xFF3949AB), fontWeight = FontWeight.Bold)
-
-                    // List Item dengan aksen Biru
-                    invoiceItems.forEach { item ->
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(item.deskripsi, style = MaterialTheme.typography.bodyMedium, color = Color(0xFF1A237E))
-                            Text(FormatterUtils.formatRupiah(context, item.harga), fontWeight = FontWeight.Bold, color = Color(0xFF1A237E))
-                        }
-                    }
-
-                    HorizontalDivider(thickness = 1.5.dp, color = Color(0xFF1A237E).copy(alpha = 0.2f))
-
-                    // Area Total yang Menonjol
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("TOTAL", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, color = Color(0xFF3949AB))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 60.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Total Tagihan",
+                        color = Color.White.copy(alpha = 0.7f),
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = FormatterUtils.formatRupiah(context, invoice.total),
+                        color = Color.White,
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    // Badge Status
+                    val isLunas = invoice.status == JenisStatus.INVOICE_LUNAS
+                    Surface(
+                        shape = CircleShape,
+                        color = if (isLunas) Color(0xFF66BB6A).copy(alpha = 0.2f) else Color(0xFFFF7043).copy(alpha = 0.2f),
+                        border = BorderStroke(1.dp, if (isLunas) Color(0xFF66BB6A) else Color(0xFFFF7043))
+                    ) {
                         Text(
-                            FormatterUtils.formatRupiah(context, invoice.total),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = Color(0xFF1A237E)
+                            text = invoice.status.uppercase(),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                            color = Color.White,
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
             }
 
-            Spacer(Modifier.height(32.dp))
-
-            // --- TOMBOL AKSI (SESUAI TEMA BIRU) ---
-            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                // Cetak PDF (Warna Hijau untuk menunjukkan fungsi dokumen)
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            user?.let { FormatterUtils.generateAndSaveInvoicePdf(context, invoice.toInvoiceEntity(it.idUser), invoiceItems, it, klienAsli, projectAsli) }
+            // --- KARTU DETAIL INVOICE (OVERLAPPING) ---
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .offset(y = (-40).dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // 1. KARTU INFORMASI UTAMA
+                Card(
+                    shape = RoundedCornerShape(28.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                ) {
+                    Column(modifier = Modifier.padding(24.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.Receipt, null, tint = Color(0xFF3949AB), modifier = Modifier.size(20.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                text = "Detail Dokumen",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF1A237E)
+                            )
                         }
-                    },
-                    modifier = Modifier.fillMaxWidth().height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32))
-                ) {
-                    Icon(Icons.Default.PictureAsPdf, null)
-                    Spacer(Modifier.width(10.dp))
-                    Text("Cetak PDF", fontWeight = FontWeight.Bold)
+
+                        HorizontalDivider(Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
+
+                        DetailInfoRow(Icons.Default.Numbers, "No. Invoice", invoice.invoiceNumber)
+                        DetailInfoRow(Icons.Default.Person, "Klien", klienAsli?.namaLengkap ?: "-")
+                        DetailInfoRow(Icons.Default.Work, "Proyek", projectAsli?.namaProject ?: "-")
+                        DetailInfoRow(Icons.Default.CalendarToday, "Tgl Terbit", FormatterUtils.formatTanggal(invoice.issueDate))
+                        DetailInfoRow(Icons.Default.Event, "Jatuh Tempo", FormatterUtils.formatTanggal(invoice.dueDate))
+                    }
                 }
 
-                // Edit (Biru Indigo Utama)
-                Button(
-                    onClick = { onEdit(invoice.idInvoice) },
-                    modifier = Modifier.fillMaxWidth().height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1A237E))
+                // 2. KARTU RINCIAN ITEM (DIBIKIN SEPERTI NOTA)
+                Card(
+                    shape = RoundedCornerShape(28.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
-                    Icon(Icons.Default.Edit, null)
-                    Spacer(Modifier.width(10.dp))
-                    Text("Edit Invoice", fontWeight = FontWeight.Bold)
+                    Column(modifier = Modifier.padding(24.dp)) {
+                        Text(
+                            text = "Rincian Item",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Gray
+                        )
+
+                        Spacer(Modifier.height(12.dp))
+
+                        invoiceItems.forEach { item ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(item.deskripsi, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                                Text(
+                                    text = FormatterUtils.formatRupiah(context, item.harga),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
                 }
 
-                // Hapus (Minimalis Merah)
-                OutlinedButton(
+                // --- TOMBOL AKSI ---
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    // Tombol PDF (Secondary)
+                    OutlinedButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                user?.let { FormatterUtils.generateAndSaveInvoicePdf(context, invoice.toInvoiceEntity(it.idUser), invoiceItems, it, klienAsli, projectAsli) }
+                            }
+                        },
+                        modifier = Modifier.weight(1f).height(56.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        border = BorderStroke(1.5.dp, Color(0xFF2E7D32)),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF2E7D32))
+                    ) {
+                        Icon(Icons.Default.PictureAsPdf, null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("PDF", fontWeight = FontWeight.Bold)
+                    }
+
+                    // Tombol Edit (Primary)
+                    Button(
+                        onClick = { onEdit(invoice.idInvoice) },
+                        modifier = Modifier.weight(1.5f).height(56.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1A237E))
+                    ) {
+                        Icon(Icons.Default.Edit, null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("Edit Invoice", fontWeight = FontWeight.Bold)
+                    }
+                }
+
+                // Tombol Hapus (Text Button di bawah agar tidak merusak fokus visual)
+                TextButton(
                     onClick = { showDeleteDialog = true },
-                    modifier = Modifier.fillMaxWidth().height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFD32F2F)),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFD32F2F))
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Hapus Invoice", fontWeight = FontWeight.Bold)
+                    Icon(Icons.Default.Delete, null, tint = Color.Red, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("Hapus Invoice Permanen", color = Color.Red)
                 }
+
+                Spacer(Modifier.height(20.dp))
             }
         }
     }
@@ -250,34 +300,33 @@ fun InvoiceDetailScreen(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Hapus Invoice") },
-            text = { Text("Tindakan ini tidak dapat dibatalkan. Hapus?") },
+            icon = { Icon(Icons.Default.Warning, null, tint = Color.Red) },
+            title = { Text("Hapus Invoice?") },
+            text = { Text("Data ini akan dihapus permanen dari sistem FreelanceHub.") },
             confirmButton = {
-                TextButton(onClick = { coroutineScope.launch { viewModel.deleteInvoice(); showDeleteDialog = false; onBack() } }) {
-                    Text("Hapus", color = Color.Red)
-                }
+                Button(
+                    onClick = { coroutineScope.launch { viewModel.deleteInvoice(); showDeleteDialog = false; onBack() } },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                ) { Text("Hapus") }
             },
-            dismissButton = { TextButton({ showDeleteDialog = false }) { Text("Batal") } }
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) { Text("Batal") }
+            }
         )
     }
 }
 
 @Composable
-private fun DetailRowWithIcon(icon: ImageVector, label: String, value: String, valueColor: Color = Color(0xFF1A237E)) {
+fun DetailInfoRow(icon: ImageVector, label: String, value: String) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(icon, null, modifier = Modifier.size(18.dp), tint = Color(0xFF3949AB))
-        Spacer(Modifier.width(10.dp))
-        Text(text = "$label :", style = MaterialTheme.typography.bodyMedium, color = Color(0xFF3949AB))
-        Spacer(Modifier.weight(1f))
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            color = valueColor,
-            textAlign = TextAlign.End
-        )
+        Icon(icon, null, tint = Color.Gray, modifier = Modifier.size(16.dp))
+        Spacer(Modifier.width(12.dp))
+        Text(text = label, style = MaterialTheme.typography.bodySmall, color = Color.Gray, modifier = Modifier.width(80.dp))
+        Text(text = value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = Color.Black)
     }
 }

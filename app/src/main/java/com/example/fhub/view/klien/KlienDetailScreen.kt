@@ -1,5 +1,6 @@
 package com.example.fhub.view.klien
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,7 +32,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,28 +40,21 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.rememberCoroutineScope // Solusi error scope
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.fhub.R
 import com.example.fhub.viewmodel.DetailViewModel
 import kotlinx.coroutines.launch
 
@@ -78,131 +72,178 @@ fun KlienDetailScreen(
     val klien = uiState.detailKlien
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Detail Klien", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
-            )
-        }
+        containerColor = Color(0xFFF5F5F5) // Background abu-abu muda yang bersih
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
-                .padding(padding)
-                .padding(24.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = padding.calculateBottomPadding())
+                .verticalScroll(rememberScrollState())
         ) {
-            // --- KARTU INFORMASI UTAMA ---
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFE8EAF6))
+            // --- HEADER GRADIENT (DENGAN IDENTITAS UTAMA) ---
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color(0xFF1A237E), Color(0xFF3949AB))
+                        )
+                    )
+                    .padding(top = 40.dp, bottom = 70.dp) // Lebih tinggi untuk efek overlap
             ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    DetailRowItem(label = "Nama Lengkap :", value = klien.namaLengkap)
-                    DetailRowItem(label = "Nama Perusahaan :", value = klien.namaPerusahaan)
-                    DetailRowItem(label = "Alamat Klien :", value = klien.alamat.ifEmpty { "-" })
-                    DetailRowItem(label = "Telpon Klien :", value = klien.telepon)
-                    DetailRowItem(label = "Email Klien :", value = klien.email)
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    IconButton(onClick = onNavigateBack, modifier = Modifier.padding(start = 8.dp)) {
+                        Icon(Icons.Default.ArrowBack, "Kembali", tint = Color.White)
+                    }
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        // Avatar Bulat Besar
+                        Box(
+                            modifier = Modifier
+                                .size(90.dp)
+                                .clip(CircleShape)
+                                .background(Color.White.copy(alpha = 0.2f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.Business, null, modifier = Modifier.size(50.dp), tint = Color.White)
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+
+                        Text(
+                            text = klien.namaLengkap,
+                            color = Color.White,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Text(
+                            text = klien.namaPerusahaan,
+                            color = Color.White.copy(alpha = 0.8f),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
             }
 
-            Spacer(Modifier.height(40.dp))
-
-            // --- TOMBOL AKSI (EDIT & HAPUS) ---
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            // --- KARTU DETAIL (OVERLAPPING KE ATAS) ---
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .offset(y = (-35).dp), // Menimpa background biru
+                shape = RoundedCornerShape(28.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
-                // TOMBOL EDIT DENGAN ICON DAN TEKS
-                Button(
-                    onClick = { onNavigateToEdit(klienId) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1A237E))
-                ) {
-                    Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(20.dp))
-                    Spacer(Modifier.width(10.dp))
-                    Text("Edit Data Klien", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                }
+                Column(modifier = Modifier.padding(24.dp)) {
+                    Text(
+                        text = "Kontak & Alamat",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1A237E)
+                    )
 
-                // TOMBOL HAPUS MINIMALIS
-                OutlinedButton(
-                    onClick = { showDeleteDialog = true },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFD32F2F)),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFD32F2F))
-                ) {
-                    Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(20.dp))
-                    Spacer(Modifier.width(10.dp))
-                    Text("Hapus Klien", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Spacer(Modifier.height(20.dp))
+
+                    // Item Informasi dengan Icon
+                    DetailInfoItem(icon = Icons.Default.Phone, label = "Telepon", value = klien.telepon)
+                    DetailInfoItem(icon = Icons.Default.Email, label = "Email", value = klien.email)
+                    DetailInfoItem(icon = Icons.Default.Home, label = "Alamat", value = klien.alamat.ifEmpty { "-" })
+
+                    Spacer(Modifier.height(30.dp))
+
+                    // Tombol Aksi
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        // Tombol Hapus (Outlined)
+                        OutlinedButton(
+                            onClick = { showDeleteDialog = true },
+                            modifier = Modifier.weight(1f).height(54.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            border = BorderStroke(1.5.dp, Color(0xFFD32F2F)),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFD32F2F))
+                        ) {
+                            Icon(Icons.Default.Delete, null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text("Hapus", fontWeight = FontWeight.Bold)
+                        }
+
+                        // Tombol Edit (Filled)
+                        Button(
+                            onClick = { onNavigateToEdit(klienId) },
+                            modifier = Modifier.weight(1.5f).height(54.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1A237E))
+                        ) {
+                            Icon(Icons.Default.Edit, null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text("Edit Data", fontWeight = FontWeight.Bold)
+                        }
+                    }
                 }
             }
         }
     }
 
-    // Dialog Konfirmasi Hapus
+    // Dialog Konfirmasi Tetap Sama (Standard Android)
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Konfirmasi Hapus") },
-            text = { Text("Apakah Anda yakin ingin menghapus klien ini?") },
+            icon = { Icon(Icons.Default.Warning, null, tint = Color(0xFFD32F2F)) },
+            title = { Text("Hapus Klien?") },
+            text = { Text("Data klien ini akan dihapus permanen dari FreelanceHub.") },
             confirmButton = {
-                TextButton(onClick = {
-                    coroutineScope.launch {
-                        viewModel.deleteKlien()
-                        showDeleteDialog = false
-                        onNavigateBack()
-                    }
-                }) {
-                    Text("Hapus", color = Color.Red)
-                }
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            viewModel.deleteKlien()
+                            showDeleteDialog = false
+                            onNavigateBack()
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F))
+                ) { Text("Hapus") }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Batal")
-                }
+                TextButton(onClick = { showDeleteDialog = false }) { Text("Batal") }
             }
         )
     }
 }
 
 @Composable
-private fun DetailRowItem(label: String, value: String) {
+private fun DetailInfoItem(icon: ImageVector, label: String, value: String) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = label,
-            modifier = Modifier.weight(1.2f),
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color(0xFF3949AB),
-            fontWeight = FontWeight.Medium
-        )
-        Text(
-            text = value,
-            modifier = Modifier.weight(1.8f),
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color(0xFF1A237E),
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.End
-        )
+        Box(
+            modifier = Modifier
+                .size(44.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color(0xFFE8EAF6)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(icon, null, tint = Color(0xFF3949AB), modifier = Modifier.size(20.dp))
+        }
+
+        Spacer(Modifier.width(16.dp))
+
+        Column {
+            Text(text = label, style = MaterialTheme.typography.labelMedium, color = Color.Gray)
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+                color = Color(0xFF1A237E)
+            )
+        }
     }
 }
