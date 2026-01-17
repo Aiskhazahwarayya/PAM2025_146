@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fhub</string>
+
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="label_full_name">Nama Lengkap</string>
+    <string name="label_business_name">Nama Bisnis</string>
+    <string name="label_address">Alamat</string>
+
+    <string name="btn_login">Masuk</string>
+    <string name="btn_register">Daftar</string>
+
+    <string name="error_empty_field">Wajib diisi</string>
+    <string name="error_wajib_diisi">Data ini wajib diisi</string>
+    <string name="error_email_invalid">Email tidak valid</string>
+    <string name="error_telepon_invalid">Nomor telepon tidak valid (Min 10 digit)</string>
+    <string name="error_password_too_short">Password min 8 karakter</string>
+    <string name="error_duplicate_email">Email sudah terdaftar!</string>
+    <string name="error_duplicate_client">Email atau No. Telepon sudah terdaftar!</string>
+    <string name="error_duplicate_invoice">Nomor Invoice sudah digunakan!</string>
+    <string name="error_invalid_date_range">Deadline tidak boleh sebelum tanggal mulai</string>
+    <string name="error_past_date">Silakan pilih tanggal hari ini</string>
+    <string name="error_invalid_range">Jatuh tempo tidak boleh sebelum tanggal terbit</string>
+    <string name="error_over_budget">Total item melebihi anggaran proyek!</string>
+    <string name="validation_error">Mohon lengkapi data yang bertanda bintang (*)</string>
+    <string name="msg_account_created">Akun berhasil dibuat</string>
+    <string name="msg_profile_updated">Profil berhasil diperbarui</string>
+    <string name="msg_login_failed">Email atau password salah</string>
+    <string name="msg_logout">Anda telah keluar</string>
+    <string name="msg_logout_success">Anda telah keluar.</string>
+
+    <string name="msg_client_added">Klien berhasil ditambahkan</string>
+    <string name="msg_client_updated">Data berhasil diperbarui</string>
+
+    <string name="msg_project_added">Proyek berhasil ditambahkan</string>
+    <string name="msg_project_updated">Proyek berhasil diperbarui</string>
+
+    <string name="msg_invoice_added">Invoice berhasil ditambahkan</string>
+    <string name="msg_invoice_updated">Invoice berhasil diperbarui</string>
+
+    <string name="title_login">Masuk ke Akun</string>
+    <string name="title_register">Daftar Akun Baru</string>
+    <string name="title_edit_profile">Edit Profil</string>
+    <string name="desc_welcome">Selamat datang kembali!</string>
+    <string name="desc_login">Masukkan email dan password Anda</string>
+    <string name="desc_register">Daftar untuk memulai</string>
+    <string name="title_my_profile">Profil Saya</string>
+    <string name="desc_update_info">Perbarui Informasi</string>
+    <string name="desc_update_profile">Ubah data profil Anda</string>
+
+    <string name="action_no_account">Belum punya akun?</string>
+    <string name="action_register_now">Daftar di sini</string>
+    <string name="action_have_account">Sudah punya akun?</string>
+    <string name="action_login_now">Mulai Sekarang</string>
+
+    <string name="greeting_hello">Halo, %1$s</string>
+    <string name="home_total_clients">Total %1$d klien</string>
+    <string name="home_deadline">Deadline</string>
+    <string name="home_total_klien">Total Klien</string>
+    <string name="home_quick_actions">Aksi Cepat</string>
+    <string name="home_deadline_approaching">Deadline Mendekati</string>
+    <string name="home_view_all">Lihat Semua</string>
+    <string name="filter_all">Semua</string>
+
+    <string name="action_add_client">Tambah Klien</string>
+    <string name="action_add_client_desc">Tambahkan klien baru ke daftar</string>
+    <string name="action_add_project">Tambah Proyek</string>
+    <string name="action_add_project_desc">Buat proyek baru untuk klien</string>
+    <string name="action_create_invoice">Buat Invoice</string>
+    <string name="action_create_invoice_desc">Buat tagihan untuk proyek</string>
+
+    <string name="profile_account_info">Informasi Akun</string>
+    <string name="profile_actions">Aksi</string>
+    <string name="profile_edit">Edit Profil</string>
+    <string name="profile_personal_info">Informasi Pribadi</string>
+
+    <string name="label_company_name">Nama Perusahaan</string>
+    <string name="label_contact_name">Nama Kontak</string>
+    <string name="label_phone">Telepon</string>
+    <string name="helper_phone">Harus diawali 08, panjang 12-13 digit</string>
+    <string name="search_client_hint">Cari klien…</string>
+    <string name="empty_client_list">Belum ada klien</string>
+
+    <string name="label_select_client">Pilih Klien</string>
+    <string name="label_project_name">Nama Proyek</string>
+    <string name="label_description">Deskripsi</string>
+    <string name="label_budget">Anggaran (Rp)</string>
+    <string name="label_start_date">Tanggal Mulai</string>
+    <string name="label_deadline">Deadline</string>
+    <string name="label_status">Status</string>
+    <string name="status_in_progress">In Progress</string>
+    <string name="status_completed">Completed</string>
+    <string name="empty_project_list">Belum ada proyek</string>
+
+    <string name="label_invoice_number">No. Invoice</string>
+    <string name="label_select_project">Pilih Proyek</string>
+    <string name="label_issue_date">Tanggal Terbit</string>
+    <string name="label_due_date">Jatuh Tempo</string>
+    <string name="label_payment_status">Status Pembayaran</string>
+    <string name="status_unpaid">Belum Bayar</string>
+    <string name="status_paid">Lunas</string>
+    <string name="label_item_description">Deskripsi Item</string>
+    <string name="label_item_price">Harga (Rp)</string>
+    <string name="btn_add_item">+ Tambah Item</string>
+    <string name="label_total">Total</string>
+    <string name="label_total_price">Total Harga</string>
+    <string name="currency_format">Rp %1$s</string>
+    <string name="empty_invoice_list">Belum ada invoice</string>
+
+    <string name="dialog_delete_title">Hapus Data?</string>
+    <string name="dialog_delete_message">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</string>
+
+    <string name="btn_save">Simpan</string>
+    <string name="btn_cancel">Batal</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_delete">Hapus</string>
+    <string name="btn_yes">Ya</string>
+    <string name="btn_no">Tidak</string>
+    <string name="btn_logout">Keluar</string>
+
+    <string name="nav_home">Beranda</string>
+    <string name="nav_clients">Klien</string>
+    <string name="nav_projects">Proyek</string>
+    <string name="nav_invoices">Invoice</string>
+    <string name="nav_profile">Profil</string>
+
+    <string name="loading">Memuat…</string>
+    <string name="error_occurred">Terjadi kesalahan</string>
+    <string name="select_date">Pilih Tanggal</string>
+</resources>
