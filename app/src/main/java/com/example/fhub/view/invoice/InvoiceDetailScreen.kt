@@ -176,7 +176,7 @@ fun InvoiceDetailScreen(
                 }
             }
 
-            // --- KARTU DETAIL INVOICE (OVERLAPPING) ---
+            // --- KARTU DETAIL INVOICE  ---
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -212,7 +212,7 @@ fun InvoiceDetailScreen(
                     }
                 }
 
-                // 2. KARTU RINCIAN ITEM (DIBIKIN SEPERTI NOTA)
+                // 2. KARTU RINCIAN ITEM
                 Card(
                     shape = RoundedCornerShape(28.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -268,7 +268,7 @@ fun InvoiceDetailScreen(
                         Text("PDF", fontWeight = FontWeight.Bold)
                     }
 
-                    // Tombol Edit (Primary)
+                    // Tombol Edit
                     Button(
                         onClick = { onEdit(invoice.idInvoice) },
                         modifier = Modifier.weight(1.5f).height(56.dp),
@@ -281,7 +281,7 @@ fun InvoiceDetailScreen(
                     }
                 }
 
-                // Tombol Hapus (Text Button di bawah agar tidak merusak fokus visual)
+                // Tombol Hapus
                 TextButton(
                     onClick = { showDeleteDialog = true },
                     modifier = Modifier.fillMaxWidth()

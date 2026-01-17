@@ -220,7 +220,7 @@ fun InvoiceFormScreen(
                 .padding(bottom = padding.calculateBottomPadding())
                 .verticalScroll(rememberScrollState())
         ) {
-            // --- HEADER SECTION (BIRU FULL TOP) ---
+            // --- HEADER SECTION  ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -251,7 +251,7 @@ fun InvoiceFormScreen(
                 }
             }
 
-            // --- FORM SECTION (OVERLAP) ---
+            // --- FORM SECTION---
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

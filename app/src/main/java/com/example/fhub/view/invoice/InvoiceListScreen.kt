@@ -188,7 +188,7 @@ fun InvoiceListScreen(
 
 @Composable
 private fun InvoiceCard(invoice: InvoiceEntity, onClick: () -> Unit) {
-    val context = LocalContext.current // ✅ WAJIB: Ambil Context untuk format Rupiah
+    val context = LocalContext.current
     val statusColor = if (invoice.status == JenisStatus.INVOICE_LUNAS) Color(0xFF4CAF50) else Color(0xFFD32F2F)
 
     Card(
@@ -218,7 +218,7 @@ private fun InvoiceCard(invoice: InvoiceEntity, onClick: () -> Unit) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Column {
                     Text(text = stringResource(R.string.label_total), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
-                    // ✅ FIXED: Pass 'context' ke formatRupiah
+
                     Text(text = FormatterUtils.formatRupiah(context, invoice.total), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color(0xFF4CAF50))
                 }
                 Icon(Icons.Default.ChevronRight, null, tint = Color(0xFFBDBDBD))
