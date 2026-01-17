@@ -80,7 +80,7 @@ fun KlienDetailScreen(
                 .padding(bottom = padding.calculateBottomPadding())
                 .verticalScroll(rememberScrollState())
         ) {
-            // --- HEADER GRADIENT (DENGAN IDENTITAS UTAMA) ---
+            // --- HEADER GRADIENT  ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -129,7 +129,7 @@ fun KlienDetailScreen(
                 }
             }
 
-            // --- KARTU DETAIL (OVERLAPPING KE ATAS) ---
+            // --- KARTU DETAIL  ---
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -191,7 +191,7 @@ fun KlienDetailScreen(
         }
     }
 
-    // Dialog Konfirmasi Tetap Sama (Standard Android)
+    // Dialog Konfirmasi
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
