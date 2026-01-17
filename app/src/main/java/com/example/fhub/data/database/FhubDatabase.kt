@@ -16,7 +16,6 @@ import com.example.fhub.data.entity.KlienEntity
 import com.example.fhub.data.entity.ProjectEntity
 import com.example.fhub.data.entity.UserEntity
 
-// Daftarkan 5 Entity sesuai SRS
 @Database(
     entities = [
         UserEntity::class,
